@@ -33,7 +33,7 @@ textarea{min-height:90px}label{display:block;font-size:13px;color:var(--sub);mar
 .tabbar{position:fixed;bottom:calc(10px + env(safe-area-inset-bottom,0px));left:10px;right:10px;z-index:20;display:flex;padding:5px;border-radius:28px}
 .tabbar button,.side button{flex:1;flex-direction:column;justify-content:center;gap:2px;font-size:10.5px;min-height:52px;border:0;background:transparent;color:var(--sub);padding:0;border-radius:22px}
 .tabbar button.on{background:var(--g2);color:var(--tint);font-weight:700}
-main{padding:14px 14px 110px;max-width:1180px;margin:0 auto}
+main{padding:14px 14px 110px;max-width:1760px;margin:0 auto}
 .hd{display:flex;align-items:center;gap:14px;margin:6px 2px 16px;flex-wrap:wrap}.hd h1{font-size:28px;font-weight:800}.hd p{color:var(--sub);font-size:14px}.hd .btn{margin-inline-start:auto}
 .ico{width:48px;height:48px;border-radius:15px;display:flex;align-items:center;justify-content:center;color:#fff}
 .grid4{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px}
@@ -60,7 +60,11 @@ main{padding:14px 14px 110px;max-width:1180px;margin:0 auto}
 #toast{position:fixed;left:50%;top:calc(76px + env(safe-area-inset-top,0px));transform:translate(-50%,-120px);padding:11px 20px;border-radius:20px;z-index:99;transition:transform .35s;font-size:14px}#toast.on{transform:translate(-50%,0)}
 .sk{height:96px;border-radius:24px;background:linear-gradient(90deg,var(--g2),var(--g),var(--g2));background-size:200% 100%;animation:sk 1.2s infinite}@keyframes sk{to{background-position:-200% 0}}
 .gsw{flex:1;max-width:420px}.gsw input{min-height:38px;border-radius:99px;padding:6px 16px;font-size:14px}
-.qa{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.qa{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px}
+.qb{min-height:64px;border-radius:22px;padding:0 14px;justify-content:flex-start;gap:12px;font-weight:700;font-size:15px;background:var(--g);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);border:1px solid var(--st);box-shadow:var(--sh),inset 0 1px 0 var(--hi)}
+.qb:hover{transform:translateY(-2px)}
+.qi{width:38px;height:38px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex:none;background:color-mix(in srgb,var(--ac) 22%,transparent);color:var(--ac)}
+.duo{display:grid;gap:14px;grid-template-columns:1fr}.duo>.card{margin-bottom:14px}.wc{display:flex;flex-direction:column;justify-content:center}
 .wc{text-align:center;cursor:pointer;user-select:none}.wc .en{font-size:38px;font-weight:800;direction:ltr;letter-spacing:-.5px}.wc .ar{font-size:26px;font-weight:700;color:var(--tint);margin-top:4px}.wc .ex{direction:ltr;font-style:italic;color:var(--sub);margin-top:8px}.wt{display:flex;justify-content:space-between;align-items:center;color:var(--sub);font-size:13px;margin:6px 0}
 .kpi small{display:block;font-size:12px;margin-top:4px}
 @media(max-width:599px){#ttl{display:none}}
@@ -70,9 +74,10 @@ main{padding:14px 14px 110px;max-width:1180px;margin:0 auto}
 .side h2{font-size:19px;padding:6px 12px 16px}
 .side button{flex:none;flex-direction:row;gap:12px;font-size:15px;min-height:46px;padding:0 14px;justify-content:flex-start;width:100%}.side button.on{background:var(--tint);color:#fff;font-weight:700}
 .top,main{margin-inline-start:258px}.top{margin-inline-end:14px}main{padding-bottom:40px;margin-inline-end:0}
-.grid4{grid-template-columns:repeat(4,1fr)}.apps{grid-template-columns:repeat(2,1fr)}.cols{grid-template-columns:1fr 1fr}
+.grid4{grid-template-columns:repeat(4,1fr)}.apps{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}.cols{grid-template-columns:repeat(auto-fit,minmax(440px,1fr))}.duo{grid-template-columns:repeat(auto-fit,minmax(440px,1fr))}.qa{grid-template-columns:repeat(4,1fr)}
 #sheet{align-items:center}.sh{border-radius:28px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+@media(min-width:1500px){.cols.c4{grid-template-columns:repeat(4,1fr)}.apps{grid-template-columns:repeat(4,1fr)}}
 </style>
 </head>
 <body>
@@ -152,12 +157,12 @@ const gate=k=>{const a=A[k];return !a.user?need(k):a.err?errv(k):!a.ld?hd(k)+ske
 const bl=(n,v,max,c)=>`<div class="bl"><span style="width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(n)}</span><i><s style="width:${max?Math.min(100,v/max*100):0}%;${c?`background:${c}`:''}"></s></i><b>${nf(v)}</b></div>`;
 /* ===== الصفحات ===== */
 function vHome(){const m=ms(),v=vs(),p=ps(),al=alerts(),[l1,i1]=ser(m.di),[,e1]=ser(m.de),[l2,s2]=ser(p.days),[l3,r3]=ser(v.rv),q=qs();
- return `<div class="hd"><div><h1>نظرة عامة</h1><p>كل تطبيقاتك في مكان واحد</p></div></div>${wc()}
- <div class="qa">${Object.keys(A).filter(k=>A[k].user&&A[k].ld&&!A[k].err).map(k=>`<button class="pri" onclick="${A[k].q[1]}()">${ic('plus')} ${A[k].q[0]}</button>`).join('')}</div>
- ${al.length?`<div class="g card"><h3>تنبيهات</h3>${al.map(([c,t])=>`<div class="it">${pill(c==='bad'?'مهم':'تنبيه',c)}<div class="m"><b style="white-space:normal">${esc(t)}</b></div></div>`).join('')}</div>`:''}
+ return `<div class="hd"><div><h1>نظرة عامة</h1><p>كل تطبيقاتك في مكان واحد</p></div></div>
+ <div class="qa">${Object.keys(A).filter(k=>A[k].user&&A[k].ld&&!A[k].err).map(k=>`<button class="qb" style="--ac:${A[k].c}" onclick="${A[k].q[1]}()"><span class="qi">${ic('plus')}</span><span>${A[k].q[0]}</span></button>`).join('')}</div>
+ <div class="duo">${wc()}${al.length?`<div class="g card"><h3>تنبيهات</h3>${al.map(([c,t])=>`<div class="it">${pill(c==='bad'?'مهم':'تنبيه',c)}<div class="m"><b style="white-space:normal">${esc(t)}</b></div></div>`).join('')}</div>`:''}</div>
  <div class="g card"><h3>ملخص آخر ٧ أيام</h3><div class="grid4" style="margin:0">${mini('الدخل',nf(w7(m.di)))}${mini('الصرف',nf(w7(m.de)))}${mini('المبيعات',nf(w7(p.days)))}${mini('مراجعات الكلمات',w7(v.rv))}</div></div>
  <div class="apps">${Object.keys(A).map(k=>{const a=A[k],x=a.user&&a.ld&&!a.err?a.h():[['','…'],['','…']];return `<div class="g ac" onclick="go('${k}')"><div class="t"><div class="ico" style="background:${a.c}">${ic(a.i)}</div><div style="flex:1"><b>${a.n}</b><small>${a.s}</small></div>${a.user?(a.err?pill('خطأ','bad'):a.ld?pill('متصل','ok'):pill('جارٍ التحميل','n')):pill('مفصول','bad')}</div><div class="v">${x.map(([l,val])=>`<div><b>${val}</b><span>${l}</span></div>`).join('')}</div></div>`}).join('')}</div>
- ${rgSeg()}<div class="cols"><div class="g card"><h3>الدخل والصرف</h3>${ch('h1','bar',l1,[bar(i1,'#30d158','دخل'),bar(e1,'#ff453a','صرف')])}</div>
+ ${rgSeg()}<div class="cols c4"><div class="g card"><h3>الدخل والصرف</h3>${ch('h1','bar',l1,[bar(i1,'#30d158','دخل'),bar(e1,'#ff453a','صرف')])}</div>
  <div class="g card"><h3>المبيعات</h3>${ch('h2','bar',l2,[bar(s2,'#ff9f0a','مبيعات')])}</div>
  <div class="g card"><h3>مراجعات الكلمات</h3>${ch('h3','bar',l3,[bar(r3,'#bf5af2','مراجعات')])}</div>
  <div class="g card"><h3>حالة حفظ الآيات</h3>${ch('h4','doughnut',['محفوظة','قيد الحفظ'],[{data:[q.m,q.p],backgroundColor:['#30d158','#ff9f0a'],borderWidth:0}])}</div></div>`}
