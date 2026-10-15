@@ -81,6 +81,11 @@ main{padding:14px 14px 110px;max-width:1760px;margin:0 auto}
 .tabbar{overflow-x:auto;scrollbar-width:none}.tabbar::-webkit-scrollbar{display:none}.tabbar button{flex:1 0 62px}
 #bgimg{position:fixed;inset:-60px;z-index:-1;background-size:cover;background-position:center;filter:blur(var(--bgb,0px));opacity:var(--bgo,1);display:none;pointer-events:none}
 input[type=range]{padding:0;min-height:30px;border:0;background:transparent;accent-color:var(--tint)}
+#embed{position:fixed;z-index:12;inset-inline:14px;top:calc(76px + env(safe-area-inset-top,0px));bottom:calc(88px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;padding:8px;gap:8px;border-radius:26px;overflow:hidden}
+.eb{display:flex;align-items:center;gap:8px;padding:0 6px;min-height:46px}.eb b{flex:1;font-size:16px}
+#eframes{flex:1;min-height:0;position:relative}#eframes iframe{position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:18px;background:#fff}
+#enone{padding:22px}#enone p{color:var(--sub);margin-bottom:10px;font-size:14px}#enone button{margin-top:12px}
+@media(min-width:900px){#embed{inset-inline-start:258px;bottom:14px}}
 </style>
 </head>
 <body>
@@ -90,6 +95,7 @@ input[type=range]{padding:0;min-height:30px;border:0;background:transparent;acce
 <aside class="side g" id="side"></aside>
 <header class="top g"><b id="ttl"></b><div class="gsw"><input id="gs" type="search" placeholder="ابحث في كل التطبيقات…" oninput="gSearch(this.value)" aria-label="بحث"></div><button class="ib" onclick="flipTheme()" id="thb" aria-label="المظهر"></button></header>
 <main id="main"></main>
+<section id="embed" class="g" hidden></section>
 <nav class="tabbar g" id="tab"></nav>
 </div>
 <div id="sheet" onclick="if(event.target.id==='sheet')closeF()"></div>
@@ -156,7 +162,7 @@ const pill=(t,c)=>`<span class="pill ${c}">${t}</span>`;
 const row=(t,s,r,b)=>`<div class="it"><div class="m"><b>${esc(t)}</b><small>${esc(s)}</small></div>${r||''}${b||''}</div>`;
 const ab=(e,d,id)=>`<button class="ib" onclick="${e}('${id}')">${ic('edit')}</button><button class="ib bad" onclick="${d}('${id}')">${ic('trash')}</button>`;
 const empty=()=>'<div class="empty">لا توجد بيانات</div>';
-const hd=k=>{const a=A[k];return `<div class="hd"><div class="ico" style="background:${a.c}">${ic(a.i)}</div><div><h1>${a.n}</h1><p>${a.s}</p></div><a class="btn" href="${esc(appUrl(k))}" target="_blank" rel="noopener">${ic('ext')} فتح التطبيق</a></div>`};
+const hd=k=>{const a=A[k];return `<div class="hd"><div class="ico" style="background:${a.c}">${ic(a.i)}</div><div><h1>${a.n}</h1><p>${a.s}</p></div><button class="btn" onclick="openApp('${k}')">${ic('ext')} فتح التطبيق</button></div>`};
 const need=k=>hd(k)+`<div class="g card empty">غير متصل بهذا التطبيق<br><br><button class="pri" onclick="relogin('${k}')">تسجيل الدخول</button></div>`;
 const errv=k=>hd(k)+`<div class="g card empty">⚠️ ${esc(A[k].err)}<br><br><button class="pri" onclick="listen('${k}')">إعادة المحاولة</button></div>`;
 const skel=()=>'<div class="grid4">'+'<div class="sk"></div>'.repeat(4)+'</div><div class="sk" style="height:240px"></div>';
@@ -307,14 +313,25 @@ function rngCard(){const f=MR.f,t=MR.t,L=D.money.filter(x=>(x.date||'')>=f&&(x.d
  <div class="row" style="flex-wrap:wrap;justify-content:flex-start;margin:12px 0">${[['w','آخر ٧ أيام'],['m','هذا الشهر'],['q','آخر ٣ شهور'],['y','هذه السنة']].map(([k,l])=>`<button style="flex:none" onclick="mrPreset('${k}')">${l}</button>`).join('')}</div>
  <div class="grid4" style="margin:0 0 12px">${mini('إجمالي الصرف',`<span style="color:var(--bad)">${nf(exp)}</span>`)}${mini('إجمالي الدخل',`<span style="color:var(--ok)">${nf(inc)}</span>`)}${mini('الصافي',nf(inc-exp))}${mini(`متوسط الصرف اليومي · ${days} يوم`,nf(exp/days))}</div>
  ${cs.length?cs.map(c=>bl(c[0],c[1],cs[0][1],'var(--bad)')).join(''):empty()}<p style="color:var(--sub);font-size:12.5px;margin-top:6px">${L.length} عملية في الفترة</p></div>`}
+/* ===== فتح التطبيقات داخل اللوحة ===== */
+P.reload='<path d="M20 12a8 8 0 11-2.3-5.6M20 4v5h-5"/>';P.x='<path d="M6 6l12 12M18 6L6 18"/>';
+$('#embed').innerHTML=`<div class="eb"><span class="ico" id="eic" style="width:36px;height:36px;border-radius:12px"></span><b id="etl"></b><button class="ib" onclick="embReload()" aria-label="إعادة تحميل">${ic('reload')}</button><a class="btn ib" id="eext" target="_blank" rel="noopener" aria-label="فتح في المتصفح" style="padding:0;justify-content:center">${ic('ext')}</a><button class="ib" onclick="go('home')" aria-label="إغلاق">${ic('x')}</button></div><div id="eframes"></div><div id="enone" hidden><p>أدخل رابط هذا التطبيق ليتفتح هنا داخل اللوحة</p><input id="eu" dir="ltr" placeholder="https://..." autocapitalize="none"><button class="pri" onclick="embSave()">حفظ وفتح</button></div>`;
+const openApp=k=>{location.hash='app-'+k};
+function showEmbed(k){const a=A[k],u=url(k),fr=$('#eframes');$('#main').hidden=true;$('#embed').hidden=false;$('#etl').textContent=a.n;const ic0=$('#eic');ic0.style.background=a.c;ic0.innerHTML=ic(a.i);$('#eext').href=u||appUrl(k);
+ if(!u){fr.querySelectorAll('iframe').forEach(f=>f.hidden=true);$('#enone').hidden=false;return}
+ $('#enone').hidden=true;let f=fr.querySelector(`iframe[data-k="${k}"]`);if(f&&f.dataset.u!==u){f.remove();f=null}
+ if(!f){f=document.createElement('iframe');f.dataset.k=k;f.dataset.u=u;f.src=u;f.allow='camera; microphone; clipboard-write; fullscreen; autoplay';f.title=a.n;fr.appendChild(f)}
+ fr.querySelectorAll('iframe').forEach(x=>x.hidden=x!==f)}
+const embReload=()=>{const f=document.querySelector(`#eframes iframe[data-k="${location.hash.slice(5)}"]`);if(f)f.src=f.dataset.u};
+const embSave=()=>{let v=$('#eu').value.trim();if(!v)return;if(!/^https?:/.test(v))v='https://'+v;setUrl(location.hash.slice(5),v);sched()};
 /* ===== النظام ===== */
 let T='home',rq;const NAV=[['home','الرئيسية','home'],...Object.keys(A).map(k=>[k,A[k].n,A[k].i]),['set','الإعدادات','set']];
 const V={home:vHome,set:vS,search:vSr,...Object.fromEntries(Object.keys(A).map(k=>[k,A[k].v]))};
 const go=k=>{GQ='';$('#gs').value='';location.hash=k},sched=()=>{cancelAnimationFrame(rq);rq=requestAnimationFrame(render)};
-function render(){syncNA();const any=Object.values(A).some(a=>a.user&&!a.na);$('#login').hidden=any;$('#app').hidden=!any;lockReset();if(!any)return;T=location.hash.slice(1);if(!V[T])T='home';const ae=document.activeElement;if(T==='set'&&ae&&ae.tagName==='INPUT')return;
- Q=[];$('#main').innerHTML=V[T]();$('#ttl').textContent=T==='search'?'البحث':(NAV.find(n=>n[0]===T)||[])[1];
- $('#side').innerHTML='<h2>لوحة التحكم</h2>'+NAV.map(([k,l,i])=>`<button class="${T===k?'on':''}" onclick="go('${k}')">${ic(i)}${l}</button>`).join('');
- $('#tab').innerHTML=NAV.map(([k,l,i])=>`<button class="${T===k?'on':''}" onclick="go('${k}')">${ic(i)}<span>${l}</span></button>`).join('');
+function render(){syncNA();const any=Object.values(A).some(a=>a.user&&!a.na);$('#login').hidden=any;$('#app').hidden=!any;lockReset();if(!any)return;T=location.hash.slice(1);const emb=T.startsWith('app-')&&A[T.slice(4)]?T.slice(4):null;if(!emb&&!V[T])T='home';const ae=document.activeElement;if(T==='set'&&ae&&ae.tagName==='INPUT')return;
+ if(emb)showEmbed(emb);else{$('#embed').hidden=true;$('#main').hidden=false;Q=[];$('#main').innerHTML=V[T]()}$('#ttl').textContent=emb?A[emb].n:T==='search'?'البحث':(NAV.find(n=>n[0]===T)||[])[1];
+ $('#side').innerHTML='<h2>لوحة التحكم</h2>'+NAV.map(([k,l,i])=>`<button class="${(emb||T)===k?'on':''}" onclick="go('${k}')">${ic(i)}${l}</button>`).join('');
+ $('#tab').innerHTML=NAV.map(([k,l,i])=>`<button class="${(emb||T)===k?'on':''}" onclick="go('${k}')">${ic(i)}<span>${l}</span></button>`).join('');
  $('#thb').innerHTML=ic(isDark()?'sun':'moon');const on=$('#tab .on');if(on&&on.scrollIntoView)on.scrollIntoView({inline:'center',block:'nearest'});paint()}
 const isDark=()=>document.documentElement.dataset.theme==='dark'||(!document.documentElement.dataset.theme&&matchMedia('(prefers-color-scheme:dark)').matches);
 function setTheme(t){localStorage.setItem('dash.theme',t);applyTheme();sched()}
@@ -334,7 +351,7 @@ async function relogin(k){const em=prompt('البريد الإلكتروني ل�
 $('#lf').onsubmit=async e=>{e.preventDefault();$('#lerr').textContent='';const ks=Object.keys(A).filter(k=>!A[k].na),r=await Promise.allSettled(ks.map(k=>A[k].auth.signInWithEmailAndPassword($('#em').value.trim(),$('#pw').value))),bad=ks.filter((k,i)=>r[i].status==='rejected');if(bad.length===ks.length)$('#lerr').textContent='تعذّر الدخول: '+r[0].reason.message;else if(bad.length)setTimeout(()=>toast('لم يتم الدخول إلى: '+bad.map(k=>A[k].n).join('، ')),600)};
 /* قفل تلقائي */
 let lk;const lkMin=()=>{const v=localStorage.getItem('dash.lock');return v===null?30:+v};
-function lockReset(){clearTimeout(lk);const m=lkMin();if(m&&Object.values(A).some(a=>a.user))lk=setTimeout(()=>{Object.values(A).forEach(a=>a.auth&&a.auth.signOut());toast('تم القفل لعدم النشاط')},m*6e4)}
+function lockReset(){clearTimeout(lk);if(location.hash.startsWith('#app-'))return;const m=lkMin();if(m&&Object.values(A).some(a=>a.user))lk=setTimeout(()=>{Object.values(A).forEach(a=>a.auth&&a.auth.signOut());toast('تم القفل لعدم النشاط')},m*6e4)}
 const setLock=m=>{localStorage.setItem('dash.lock',m);lockReset();sched()};
 ['pointerdown','keydown','scroll','touchstart'].forEach(e=>addEventListener(e,lockReset,{passive:true}));
 /* PWA */
