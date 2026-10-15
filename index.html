@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#3b9de8"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="لوحتي">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#000000"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="لوحتي">
 <title>لوحة التحكم الموحّدة</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
@@ -338,7 +338,7 @@ function lockReset(){clearTimeout(lk);const m=lkMin();if(m&&Object.values(A).som
 const setLock=m=>{localStorage.setItem('dash.lock',m);lockReset();sched()};
 ['pointerdown','keydown','scroll','touchstart'].forEach(e=>addEventListener(e,lockReset,{passive:true}));
 /* PWA */
-try{const mf={name:'لوحة التحكم الموحّدة',short_name:'لوحتي',start_url:location.href.split('#')[0],display:'standalone',dir:'rtl',lang:'ar',background_color:'#000000',theme_color:'#3b9de8',icons:[{src:'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#3b9de8"/><g fill="#fff"><rect x="120" y="120" width="120" height="120" rx="28"/><rect x="272" y="120" width="120" height="120" rx="28" opacity=".7"/><rect x="120" y="272" width="120" height="120" rx="28" opacity=".7"/><rect x="272" y="272" width="120" height="120" rx="28"/></g></svg>'),sizes:'any',type:'image/svg+xml',purpose:'any'}]};const l=document.createElement('link');l.rel='manifest';l.href=URL.createObjectURL(new Blob([JSON.stringify(mf)],{type:'application/manifest+json'}));document.head.appendChild(l)}catch(e){}
+try{const mf={name:'لوحة التحكم الموحّدة',short_name:'لوحتي',start_url:location.href.split('#')[0],display:'standalone',dir:'rtl',lang:'ar',background_color:'#000000',theme_color:'#000000',icons:[{src:'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#3b9de8"/><g fill="#fff"><rect x="120" y="120" width="120" height="120" rx="28"/><rect x="272" y="120" width="120" height="120" rx="28" opacity=".7"/><rect x="120" y="272" width="120" height="120" rx="28" opacity=".7"/><rect x="272" y="272" width="120" height="120" rx="28"/></g></svg>'),sizes:'any',type:'image/svg+xml',purpose:'any'}]};const l=document.createElement('link');l.rel='manifest';l.href=URL.createObjectURL(new Blob([JSON.stringify(mf)],{type:'application/manifest+json'}));document.head.appendChild(l)}catch(e){}
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();IP=e;sched()});
 addEventListener('hashchange',sched);matchMedia('(prefers-color-scheme:dark)').addEventListener('change',()=>{applyTheme();sched()});
 applyTheme();
