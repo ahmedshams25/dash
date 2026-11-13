@@ -82,7 +82,7 @@ main{padding:14px 14px 110px;max-width:1680px;margin:0 auto}
 .pit{display:flex;align-items:flex-start;gap:10px;padding:9px 10px;font-size:12.5px;line-height:1.5}
 .pit .pill{flex:none;margin-top:1px}
 .pit span{flex:1;min-width:0}
-.bigib{width:40px;min-height:40px;border-radius:11px;position:relative}
+.bigib{width:40px;min-height:40px;border-radius:11px;position:relative;padding:0;justify-content:center;flex:none}
 .nbadge{position:absolute;top:-4px;inset-inline-end:-4px;background:var(--bad);color:#fff;font-size:10px;font-weight:700;min-width:17px;height:17px;padding:0 4px;border-radius:9px;display:flex;align-items:center;justify-content:center;border:2px solid var(--surface)}
 .hact{margin-inline-start:auto;display:flex;gap:8px;align-items:center}
 .smi{display:flex;align-items:center;gap:10px;background:var(--s2);border-radius:10px;padding:10px 12px}
@@ -105,6 +105,7 @@ main{padding:14px 14px 110px;max-width:1680px;margin:0 auto}
 .aim{max-width:80%;padding:9px 13px;border-radius:12px;font-size:13.5px;line-height:1.8;white-space:pre-wrap;word-break:break-word}
 .aim.u{align-self:flex-start;background:var(--tint);color:#fff;border-end-start-radius:4px}
 .aim.a{align-self:flex-end;background:var(--s2);border:1px solid var(--border);border-end-end-radius:4px}
+.aim.x{align-self:center;max-width:100%;background:color-mix(in srgb,var(--ok) 10%,transparent);color:var(--ok);border:1px solid color-mix(in srgb,var(--ok) 30%,transparent);border-radius:99px;font-size:12px;padding:6px 13px}
 .typing{animation:th 1.2s infinite;color:var(--sub)}
 @keyframes th{50%{opacity:.35}}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
@@ -246,7 +247,7 @@ function hAn(){const apps=[['money','مالي'],['pos','نقطة البيع'],['
  else{const o=mos(),[lb,cs]=ser(o.cost);body=`<div class="hgrid"><div>${ch('ha1','bar',lb,[bar(cs,TA(1),'التكلفة')])}</div><div>${o.Pr.length?ch('ha2','doughnut',['نشطة','مكتملة'],[{data:[o.act.length,o.dn.length],backgroundColor:[TA(1),C_OK],borderWidth:0}]):empty()}</div></div>`}
  return `<div class="g card"><div class="bar2"><h3>الإحصائيات</h3>${rgSeg()}</div><div class="seg apseg">${apps.map(([k,l])=>`<button class="${on===k?'on':''}" onclick="setHch('${k}')">${l}</button>`).join('')}</div>${body}</div>`}
 function vHome(){const m=ms(),v=vs(),p=ps();
- return `<div class="hd"><div><h1>نظرة عامة</h1><p>كل تطبيقاتك في مكان واحد</p></div><div class="hact">${alPanel()}${qaPanel()}</div></div>
+ return `<div class="hd"><div><h1>نظرة عامة</h1><p>كل تطبيقاتك في مكان واحد</p></div><div class="hact">${alPanel()}<button class="ib bigib" title="المساعد الذكي" aria-label="المساعد الذكي" onclick="go('ai')">${ic('ai')}</button>${qaPanel()}</div></div>
  <div class="duo">${wc()}<div class="g card"><h3>ملخص آخر ٧ أيام</h3><div class="grid4" style="margin:0">${smi('tup','الدخل',nf(w7(m.di)))}${smi('tdn','الصرف',nf(w7(m.de)))}${smi('cart','المبيعات',nf(w7(p.days)))}${smi('vocab','المراجعات',w7(v.rv))}</div></div></div>
  <div class="apps">${Object.keys(A).map(k=>{const a=A[k],x=a.user&&a.ld&&!a.err?a.h():[['','…'],['','…']];return `<div class="g ac" onclick="go('${k}')"><div class="t"><div class="ico" style="background:${a.c}">${ic(a.i)}</div><div style="flex:1"><b>${a.n}</b><small>${a.s}</small></div>${a.user?(a.err?pill('خطأ','bad'):a.ld?pill('متصل','ok'):pill('جارٍ التحميل','n')):pill('مفصول','bad')}</div><div class="v">${x.map(([l,val])=>`<div><b>${val}</b><span>${l}</span></div>`).join('')}</div></div>`}).join('')}</div>
  ${hAn()}`}
@@ -427,26 +428,68 @@ const aiSys=()=>`أنت "مساعد اللوحة" — مساعد تحليلي ش
 3) لو طُلب تقرير أو تحليل، نظّم الإجابة بعناوين ونقاط وأرقام واضحة.
 4) التواريخ بصيغة YYYY-MM-DD والأرقام بالأرقام الإنجليزية.
 5) لو السؤال خارج بيانات المستخدم تمامًا أجب باختصار من معرفتك العامة مع التوضيح.
+6) عند طلب المستخدم تنفيذ عملية (إضافة، حذف، تعديل، تسجيل بيع...) استخدم الدوال المتاحة فورًا بدل أن تصف الخطوات — ولا تنفّذ أي عملية لم يطلبها صراحة. بعد التنفيذ أكّد ما حدث بإيجاز، ولو رفض المستخدم التنفيذ أو فشل الأمر اشرح باختصار بدون إعادة المحاولة.
 
 ===== بيانات المستخدم الحالية =====
 ${aiDigest()}`;
-const aiCall=async()=>{const contents=[];AI.his.slice(-10).forEach(m=>{const role=m.r==='u'?'user':'model',last=contents[contents.length-1];if(last&&last.role===role)last.parts[0].text+='\n'+m.t;else contents.push({role,parts:[{text:m.t}]})});while(contents.length&&contents[0].role!=='user')contents.shift();
- const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(AI.m())}:generateContent?key=${encodeURIComponent(AI.k())}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({systemInstruction:{parts:[{text:aiSys()}]},contents,generationConfig:{temperature:.4}})});
- if(!r.ok){const j=await r.json().catch(()=>({}));throw new Error((j.error&&j.error.message)||'HTTP '+r.status)}
- const j=await r.json(),t=((j.candidates||[])[0]&&((j.candidates[0].content||{}).parts||[]).map(p=>p.text||'').join(''))||'مفيش رد من الموديل';return t};
-const aiMsg=m=>m.r==='u'?`<div class="aim u"><span>${esc(m.t)}</span></div>`:`<div class="aim a"><span>${esc(m.t)}</span></div>`;
+/* الأوامر القابلة للتنفيذ (Function Calling) */
+const AIDECL=[
+ {name:'add_money',description:'إضافة عملية مالية (دخل أو مصروف) في تطبيق مالي',parameters:{type:'OBJECT',properties:{type:{type:'STRING',description:'income للدخل أو expense للمصروف'},amount:{type:'NUMBER'},category:{type:'STRING'},description:{type:'STRING'},date:{type:'STRING',description:'YYYY-MM-DD اختياري، الافتراضي اليوم'}},required:['type','amount','category']}},
+ {name:'delete_money',description:'حذف أحدث عملية مالية مطابقة للمعايير',parameters:{type:'OBJECT',properties:{category:{type:'STRING'},description:{type:'STRING'},amount:{type:'NUMBER'},date:{type:'STRING'}},required:['category']}},
+ {name:'add_word',description:'إضافة كلمة إنجليزية جديدة بمعلها في كلماتي',parameters:{type:'OBJECT',properties:{en:{type:'STRING'},ar:{type:'STRING'},ex:{type:'STRING',description:'جملة مثال اختيارية'}},required:['en','ar']}},
+ {name:'add_verse',description:'إضافة آية أو جزء لقائمة الحفظ',parameters:{type:'OBJECT',properties:{name:{type:'STRING'},surah:{type:'STRING'},numbers:{type:'STRING'},text:{type:'STRING'},status:{type:'STRING',description:'pending أو memorized'}},required:['name','surah']}},
+ {name:'mark_verse',description:'تغيير حالة آية موجودة إلى محفوظة أو قيد الحفظ',parameters:{type:'OBJECT',properties:{name:{type:'STRING',description:'جزء من اسم الآية'},status:{type:'STRING',description:'memorized أو pending'}},required:['name','status']}},
+ {name:'add_product',description:'إضافة منتج جديد لنقطة البيع',parameters:{type:'OBJECT',properties:{name:{type:'STRING'},price:{type:'NUMBER'},stock:{type:'INTEGER'},category:{type:'STRING'},code:{type:'STRING'}},required:['name','price','stock']}},
+ {name:'set_stock',description:'تعديل مخزون منتج موجود بالاسم',parameters:{type:'OBJECT',properties:{name:{type:'STRING',description:'جزء من اسم المنتج'},stock:{type:'INTEGER'}},required:['name','stock']}},
+ {name:'record_sale',description:'تسجيل عملية بيع لمنتج موجود (يخصم من المخزون)',parameters:{type:'OBJECT',properties:{product:{type:'STRING',description:'جزء من اسم المنتج'},qty:{type:'INTEGER'},pay:{type:'STRING',description:'نقدي أو بطاقة'}},required:['product','qty']}},
+ {name:'add_client',description:'إضافة عميل جديد في الموشن',parameters:{type:'OBJECT',properties:{name:{type:'STRING'},cat:{type:'STRING'},cls:{type:'STRING'},phone:{type:'STRING'},email:{type:'STRING'},site:{type:'STRING'}},required:['name']}},
+ {name:'add_project',description:'إضافة مشروع جديد في الموشن لعميل موجود',parameters:{type:'OBJECT',properties:{title:{type:'STRING'},client:{type:'STRING',description:'جزء من اسم العميل'},type:{type:'STRING'},deadline:{type:'STRING',description:'YYYY-MM-DD'},cost:{type:'NUMBER'}},required:['title','client']}},
+ {name:'complete_project',description:'تعليم مشروع كأنه مكتمل',parameters:{type:'OBJECT',properties:{title:{type:'STRING',description:'جزء من عنوان المشروع'}},required:['title']}},
+ {name:'add_grocery',description:'إضافة غرض لقائمة طلبات البيت',parameters:{type:'OBJECT',properties:{name:{type:'STRING'},category:{type:'STRING',description:'veggies أو dairy أو meats أو bakery أو clean'},urgent:{type:'BOOLEAN'}},required:['name']}},
+ {name:'add_meal',description:'إضافة وجبة مقترحة في البيت',parameters:{type:'OBJECT',properties:{title:{type:'STRING'},day:{type:'STRING'},ingredients:{type:'STRING',description:'مفصولة بفاصلة'}},required:['title']}},
+ {name:'add_note',description:'إضافة ملاحظة سريعة في البيت',parameters:{type:'OBJECT',properties:{text:{type:'STRING'}},required:['text']}}];
+const aiSum={add_money:a=>`إضافة ${a.type==='income'?'دخل':'مصروف'} ${nf(+a.amount||0)} ج.م · ${a.category||''}`,delete_money:a=>`حذف عملية مالية (${a.category||''}${a.date?' · '+a.date:''})`,add_word:a=>`إضافة كلمة ${a.en} = ${a.ar}`,add_verse:a=>`إضافة آية ${a.name} [${a.surah}]`,mark_verse:a=>`تغيير حالة «${a.name}»`,add_product:a=>`إضافة منتج ${a.name}`,set_stock:a=>`مخزون ${a.name} ← ${a.stock}`,record_sale:a=>`بيع ${a.qty||1} × ${a.product}`,add_client:a=>`إضافة عميل ${a.name}`,add_project:a=>`إضافة مشروع ${a.title}`,complete_project:a=>`إكمال مشروع ${a.title}`,add_grocery:a=>`إضافة غرض ${a.name}`,add_meal:a=>`إضافة وجبة ${a.title}`,add_note:a=>'إضافة ملاحظة'};
+const aiCk=k=>{if(!(A[k].user&&A[k].ld&&!A[k].err))throw new Error('تطبيق '+A[k].n+' مش متصل')};
+const aiOK=s=>confirm('المساعد بيطلب تنفيذ:\n'+s+'\n\nتنفّذ؟');
+const aiExec=async(name,a={})=>{try{switch(name){
+ case 'add_money':{aiCk('money');if(!aiOK(`${a.type==='income'?'دخل':'مصروف'} ${nf(+a.amount||0)} ج.م · ${a.category||''}${a.date?' · '+a.date:''}`))return 'رفض المستخدم التنفيذ';await mRef().push({amount:+a.amount||0,type:a.type==='income'?'income':'expense',category:String(a.category||'عام'),description:String(a.description||''),date:a.date||dkey(new Date())});return 'تمت إضافة العملية المالية'}
+ case 'delete_money':{aiCk('money');const m=D.money.filter(t=>(!a.category||(t.category||'').includes(a.category))&&(!a.description||(t.description||'').includes(a.description))&&(!a.amount||+t.amount===+a.amount)&&(!a.date||t.date===a.date));if(!m.length)return 'مفيش عملية مطابقة';const t=m[m.length-1];if(!aiOK(`حذف العملية: ${t.date} ${t.type==='income'?'دخل':'مصروف'} ${nf(t.amount)} · ${t.category}${t.description?' · '+t.description:''}`))return 'رفض المستخدم التنفيذ';await mRef(t.id).remove();return 'تم حذف العملية'}
+ case 'add_word':{aiCk('vocab');const en=String(a.en||'').trim(),ar=String(a.ar||'').trim();if(!en||!ar)return 'بيانات ناقصة';if(!aiOK(`إضافة كلمة «${en}» = «${ar}»`))return 'رفض المستخدم التنفيذ';const n=Date.now();await vTx(o=>{if(!o.cards.some(x=>x.en.toLowerCase()===en.toLowerCase()))o.cards.push({id:n+Math.floor(Math.random()*1e6),en,ar,ex:String(a.ex||'').trim(),pos:'',topic:'',added:n,u:n,due:0,ivl:0,ease:2.5,reps:0,lapses:0,last:0});return o});return 'تمت إضافة الكلمة'}
+ case 'add_verse':{aiCk('quran');if(!aiOK(`إضافة آية «${a.name}» [${a.surah}]`))return 'رفض المستخدم التنفيذ';await qTx(ar2=>[...ar2,{id:Math.max(0,...ar2.map(x=>x.id||0))+1,name:String(a.name||''),surah:String(a.surah||''),numbers:String(a.numbers||''),text:String(a.text||''),status:a.status==='memorized'?'memorized':'pending',image:''}]);return 'تمت إضافة الآية'}
+ case 'mark_verse':{aiCk('quran');const v=D.quran.find(x=>(x.name||'').includes(a.name)||(x.surah||'')===a.surah);if(!v)return 'مش لاقي الآية';if(!aiOK(`تعليم «${v.name}» كـ${a.status==='pending'?'قيد الحفظ':'محفوظة'}`))return 'رفض المستخدم التنفيذ';await qTx(ar2=>ar2.map(x=>x.id==v.id?{...x,status:a.status==='pending'?'pending':'memorized'}:x));return 'تم تغيير الحالة'}
+ case 'add_product':{aiCk('pos');if(!aiOK(`إضافة منتج «${a.name}» · سعر ${nf(+a.price||0)} · مخزون ${Math.round(+a.stock||0)}`))return 'رفض المستخدم التنفيذ';await pTx(ar2=>[...ar2,{id:Math.random().toString(36).slice(2,10),name:String(a.name),price:+a.price||0,stock:Math.round(+a.stock||0),category:String(a.category||'أخرى'),code:String(a.code||''),image:''}]);return 'تمت إضافة المنتج'}
+ case 'set_stock':{aiCk('pos');const p=arr(D.pos.products).find(x=>(x.name||'').includes(a.name));if(!p)return 'مش لاقي المنتج';if(!aiOK(`مخزون «${p.name}»: ${p.stock} ← ${Math.round(+a.stock||0)}`))return 'رفض المستخدم التنفيذ';await pTx(ar2=>ar2.map(x=>x.id==p.id?{...x,stock:Math.round(+a.stock||0)}:x));return 'تم تحديث المخزون'}
+ case 'record_sale':{aiCk('pos');const q=Math.max(1,Math.round(+a.qty||1)),p=arr(D.pos.products).find(x=>(x.name||'').includes(a.product));if(!p)return 'مش لاقي المنتج';if(p.stock<q)return `المخزون مش كافي (${p.stock})`;if(!aiOK(`بيع ${q} × ${p.name} = ${nf(p.price*q)} ج.م`))return 'رفض المستخدم التنفيذ';await A.pos.db.runTransaction(async t=>{const s=await t.get(pDoc()),x=s.exists?s.data():{},Pr=arr(x.products),S=arr(x.sales),pp=Pr.find(z=>z.id===p.id);if(!pp||pp.stock<q)throw new Error('المخزون غير كافٍ');pp.stock-=q;S.push({id:Math.random().toString(36).slice(2,10),items:[{id:pp.id,name:pp.name,price:pp.price,qty:q}],total:pp.price*q,customerId:null,payMethod:a.pay==='بطاقة'?'بطاقة':'نقدي',date:new Date().toISOString()});t.set(pDoc(),{products:Pr,sales:S},{merge:true})});return 'تم تسجيل البيع'}
+ case 'add_client':{aiCk('motion');if(!aiOK(`إضافة عميل «${a.name}»`))return 'رفض المستخدم التنفيذ';const id=uid();await mdc('clients').doc(id).set({id,created:Date.now(),name:String(a.name),cat:String(a.cat||''),cls:String(a.cls||''),phone:String(a.phone||''),email:String(a.email||''),site:String(a.site||'')});return 'تمت إضافة العميل'}
+ case 'add_project':{aiCk('motion');const c=arr(D.motion.clients).find(x=>(x.name||'').includes(a.client));if(!c)return 'مش لاقي العميل — لازم يكون مسجل أولًا';if(!aiOK(`إضافة مشروع «${a.title}» لعميل ${c.name}`))return 'رفض المستخدم التنفيذ';const id=uid();await mdc('projects').doc(id).set({id,created:Date.now(),status:'active',tasks:[],links:[],files:[],script:'',notes:'',title:String(a.title),client:c.id,type:String(a.type||''),dur:'',deadline:String(a.deadline||''),cost:+a.cost||0});return 'تمت إضافة المشروع'}
+ case 'complete_project':{aiCk('motion');const p=arr(D.motion.projects).find(x=>(x.title||'').includes(a.title));if(!p)return 'مش لاقي المشروع';if(!aiOK(`تعليم «${p.title}» كمكتمل`))return 'رفض المستخدم التنفيذ';await mdc('projects').doc(p.id).update({status:'done',doneAt:Date.now()});return 'تم تعليم المشروع كمكتمل'}
+ case 'add_grocery':{aiCk('house');const cat=a.category&&HC[a.category]?a.category:(Object.keys(HC).find(k=>HC[k].includes(String(a.category||'')))||'clean');if(!aiOK(`إضافة غرض «${a.name}»${a.urgent?' (عاجل)':''}`))return 'رفض المستخدم التنفيذ';await hoRef('grocery').push({name:String(a.name).trim(),category:cat,urgent:!!a.urgent,checked:false,addedBy:ME,senderDeviceId:'dashboard',createdAt:Date.now()});return 'تمت إضافة الغرض'}
+ case 'add_meal':{aiCk('house');if(!aiOK(`إضافة وجبة «${a.title}»`))return 'رفض المستخدم التنفيذ';await hoRef('meals').push({title:String(a.title).trim(),day:String(a.day||''),ingredients:String(a.ingredients||'').split(/[,،]/).map(x=>x.trim()).filter(Boolean),upVotes:[ME],downVotes:[],addedBy:ME,senderDeviceId:'dashboard',createdAt:Date.now()});return 'تمت إضافة الوجبة'}
+ case 'add_note':{aiCk('house');if(!aiOK(`إضافة ملاحظة: «${String(a.text||'').slice(0,80)}»`))return 'رفض المستخدم التنفيذ';await hoRef('notes').push({text:String(a.text).trim(),author:ME,date:'اليوم '+new Date().toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'}),senderDeviceId:'dashboard',createdAt:Date.now()});return 'تمت إضافة الملاحظة'}
+ default:return 'أمر مش معروف'}}catch(e){return 'خطأ: '+e.message}};
+const aiBuild=()=>{const contents=[];AI.his.filter(m=>m.r==='u'||m.r==='a').slice(-12).forEach(m=>{const role=m.r==='u'?'user':'model',last=contents[contents.length-1];if(last&&last.role===role)last.parts[0].text+='\n'+m.t;else contents.push({role,parts:[{text:m.t}]})});while(contents.length&&contents[0].role!=='user')contents.shift();return contents};
+const aiRaw=contents=>fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(AI.m())}:generateContent?key=${encodeURIComponent(AI.k())}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({systemInstruction:{parts:[{text:aiSys()}]},contents,tools:[{functionDeclarations:AIDECL}],generationConfig:{temperature:.4}})}).then(async r=>{if(!r.ok){const j=await r.json().catch(()=>({}));throw new Error((j.error&&j.error.message)||'HTTP '+r.status)}return r.json()});
+const aiCall=async()=>{const contents=aiBuild(),done=[];let t='';
+ for(let i=0;i<4;i++){const j=await aiRaw(contents),c=((j.candidates||[])[0]||{}).content||{},ps=c.parts||[],fcs=ps.filter(p=>p.functionCall);
+  t=ps.map(p=>p.text||'').join('').trim();
+  if(!fcs.length)break;
+  contents.push({role:'model',parts:ps});
+  const fr=[];for(const f of fcs){const args=f.functionCall.args||{},r=await aiExec(f.functionCall.name,args);done.push((aiSum[f.functionCall.name]||(x=>f.functionCall.name))(args)+' — '+r);fr.push({functionResponse:{name:f.functionCall.name,response:{result:r}}})}
+  contents.push({role:'function',parts:fr});t=''}
+ return{t:t||'تم التنفيذ ✓',done}};
+const aiMsg=m=>m.r==='u'?`<div class="aim u"><span>${esc(m.t)}</span></div>`:m.r==='x'?`<div class="aim x"><span>${esc(m.t)}</span></div>`:`<div class="aim a"><span>${esc(m.t)}</span></div>`;
 const aiAsk=async q=>{q=String(q||'').trim();if(!q||AIB)return;if(!AI.k()){toast('ضيف مفتاح Google AI من الإعدادات أولًا');go('set');return}
  AI.his.push({r:'u',t:q});AIB=1;sched();
  setTimeout(()=>{const l=$('#ailist');if(l)l.scrollTop=l.scrollHeight},30);
- try{const t=await aiCall();AI.his.push({r:'a',t})}catch(e){AI.his.push({r:'a',t:'⚠️ '+e.message})}
+ try{const{t,done}=await aiCall();done.forEach(d=>AI.his.push({r:'x',t:d}));AI.his.push({r:'a',t})}catch(e){AI.his.push({r:'a',t:'⚠️ '+e.message})}
  AIB=0;aiSave();sched();
  setTimeout(()=>{const l=$('#ailist');if(l)l.scrollTop=l.scrollHeight},30)};
 const aiSubmit=e=>{e.preventDefault();const i=$('#aiq'),q=i.value;i.value='';aiAsk(q)};
-const AIC=['لخّص وضعي المالي هذا الشهر','إيه اللي مستحق مراجعته دلوقتي؟','اعملي تقرير أسبوعي شامل','أخطر تنبيهات عندي إيه؟','أكتر ٣ منتجات مبيعًا ومخزونهم كام؟','مشاريعي المتأخرة ومواعيد تسليمها'];
+const AIC=['لخّص وضعي المالي هذا الشهر','ضيف مصروف 50 جنيه بقالة','إيه اللي مستحق مراجعته دلوقتي؟','اعملي تقرير أسبوعي شامل','سجل بيع 3 عصير','ضيف كلمة achieve = يحقق','أخطر تنبيهات عندي إيه؟','مشاريعي المتأخرة ومواعيد تسليمها'];
 const aiChip=c=>aiAsk(c);
 function vAI(){const has=AI.k();
- return `<div class="hd"><div><h1>المساعد الذكي</h1><p>يحلل ويبحث في كل بيانات تطبيقاتك — اسأله أي حاجة</p></div><div class="hact">${AI.his.length?`<button class="btn" onclick="aiClear()">${ic('trash')} مسح المحادثة</button>`:''}</div></div>
- <div class="g card aicard"><div class="ailist" id="ailist">${AI.his.length?AI.his.map(aiMsg).join(''):'<div class="empty" style="border:0">اسأل سؤال عن بياناتك، مثلًا: «صرفت كام على البقالة الشهر ده؟»</div>'}${AIB?'<div class="aim a typing"><span>يكتب…</span></div>':''}</div>
+ return `<div class="hd"><div><h1>المساعد الذكي</h1><p>يحلل ويبحث في بياناتك وينفّذ أوامر — مع تأكيدك قبل أي تنفيذ</p></div><div class="hact">${AI.his.length?`<button class="btn" onclick="aiClear()">${ic('trash')} مسح المحادثة</button>`:''}</div></div>
+ <div class="g card aicard"><div class="ailist" id="ailist">${AI.his.length?AI.his.map(aiMsg).join(''):'<div class="empty" style="border:0">اسأل أو اطلب تنفيذ، مثلًا: «صرفت كام على البقالة؟» أو «ضيف مصروف 50 جنيه مواصلات»</div>'}${AIB?'<div class="aim a typing"><span>يكتب…</span></div>':''}</div>
  <div class="chips">${AIC.map(c=>`<button onclick="aiChip('${c}')">${c}</button>`).join('')}</div>
  <form class="airow" onsubmit="aiSubmit(event)"><input id="aiq" placeholder="${has?'اكتب سؤالك…':'ضيف المفتاح من الإعدادات أولًا'}" autocomplete="off" ${AIB?'disabled':''}><button class="pri" type="submit" ${AIB?'disabled':''}>إرسال</button></form>
  ${has?'':'<p class="aiwarn">محتاج مفتاح API مجاني من Google AI Studio (aistudio.google.com) — حطه في الإعدادات ← المساعد الذكي.</p>'}</div>`}
