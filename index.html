@@ -95,6 +95,24 @@ main{padding:14px 14px 110px;max-width:1680px;margin:0 auto}
 .hgrid>:only-child{grid-column:1/-1}
 .apseg{max-width:560px;margin-bottom:14px}
 @media(min-width:900px){.hgrid{grid-template-columns:1.8fr 1fr}}
+.wbtns{display:flex;gap:8px;margin-top:12px}
+.wbtns button{flex:1;justify-content:center;min-height:38px;font-weight:600;font-size:13px}
+.wok{background:color-mix(in srgb,var(--ok) 14%,transparent);color:var(--ok);border-color:transparent}
+.wno{background:color-mix(in srgb,var(--warn) 14%,transparent);color:var(--warn);border-color:transparent}
+.wok:hover,.wno:hover{filter:brightness(1.05)}
+.aicard{display:flex;flex-direction:column}
+.ailist{display:flex;flex-direction:column;gap:8px;max-height:480px;overflow-y:auto;padding:4px 2px 8px}
+.aim{max-width:80%;padding:9px 13px;border-radius:12px;font-size:13.5px;line-height:1.8;white-space:pre-wrap;word-break:break-word}
+.aim.u{align-self:flex-start;background:var(--tint);color:#fff;border-end-start-radius:4px}
+.aim.a{align-self:flex-end;background:var(--s2);border:1px solid var(--border);border-end-end-radius:4px}
+.typing{animation:th 1.2s infinite;color:var(--sub)}
+@keyframes th{50%{opacity:.35}}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.chips button{min-height:30px;font-size:12px;padding:0 12px;border-radius:99px;background:var(--s2);border-color:transparent;color:var(--sub)}
+.airow{display:flex;gap:8px;margin-top:10px}
+.airow input{flex:1}
+.airow button{flex:none}
+.aiwarn{color:var(--warn);font-size:12.5px;margin-top:10px}
 @media(max-width:599px){#ttl{display:none}}
 @media(min-width:900px){
 .tabbar{display:none}
@@ -148,7 +166,7 @@ const nf=n=>Number(n||0).toLocaleString('en-US',{maximumFractionDigits:1}),arr=v
 const dkey=d=>new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
 const lastMonths=n=>{const r=[],d=new Date();d.setDate(1);for(let i=0;i<n;i++){r.unshift(dkey(d).slice(0,7));d.setMonth(d.getMonth()-1)}return r};
 const lastDays=n=>{const r=[],d=new Date();for(let i=0;i<n;i++){r.unshift(dkey(d));d.setDate(d.getDate()-1)}return r};
-const P={home:'<path d="M4 11l8-7 8 7v8a1 1 0 01-1 1h-4v-6h-6v6H5a1 1 0 01-1-1z"/>',book:'<path d="M5 4h10a3 3 0 013 3v13H8a3 3 0 01-3-3z"/><path d="M5 17a3 3 0 013-3h10"/>',wallet:'<rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18M16 14.5h2"/>',vocab:'<path d="M5 5h14a2 2 0 012 2v8a2 2 0 01-2 2H11l-5 4v-4H5a2 2 0 01-2-2V7a2 2 0 012-2z"/>',cart:'<circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/><path d="M3 4h2.5l2.2 11h10.3l2-8H6.5"/>',set:'<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>',plus:'<path d="M12 5v14M5 12h14"/>',trash:'<path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12"/>',ext:'<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6L7 7M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4"/>',moon:'<path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/>',check:'<path d="M5 12l5 5 9-10"/>',edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/>',dl:'<path d="M12 4v11M7 11l5 5 5-5M5 20h14"/>',spk:'<path d="M4 10v4h4l5 4V6L8 10H4z"/><path d="M16 9a4 4 0 010 6"/>',film:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 3v18M17 3v18M3 8h4M3 16h4M17 8h4M17 16h4"/>',bag:'<path d="M4 9h16l-1.5 11h-13zM8 9l2-5M16 9l-2-5"/>',bell:'<path d="M18 9a6 6 0 10-12 0c0 6-2 7-2 7h16s-2-1-2-7"/><path d="M10 20a2 2 0 004 0"/>',tup:'<path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/>',tdn:'<path d="M3 7l6 6 4-4 8 8"/><path d="M14 17h7v-7"/>'};
+const P={home:'<path d="M4 11l8-7 8 7v8a1 1 0 01-1 1h-4v-6h-6v6H5a1 1 0 01-1-1z"/>',book:'<path d="M5 4h10a3 3 0 013 3v13H8a3 3 0 01-3-3z"/><path d="M5 17a3 3 0 013-3h10"/>',wallet:'<rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18M16 14.5h2"/>',vocab:'<path d="M5 5h14a2 2 0 012 2v8a2 2 0 01-2 2H11l-5 4v-4H5a2 2 0 01-2-2V7a2 2 0 012-2z"/>',cart:'<circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/><path d="M3 4h2.5l2.2 11h10.3l2-8H6.5"/>',set:'<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>',plus:'<path d="M12 5v14M5 12h14"/>',trash:'<path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12"/>',ext:'<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6L7 7M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4"/>',moon:'<path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/>',check:'<path d="M5 12l5 5 9-10"/>',edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/>',dl:'<path d="M12 4v11M7 11l5 5 5-5M5 20h14"/>',spk:'<path d="M4 10v4h4l5 4V6L8 10H4z"/><path d="M16 9a4 4 0 010 6"/>',film:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 3v18M17 3v18M3 8h4M3 16h4M17 8h4M17 16h4"/>',bag:'<path d="M4 9h16l-1.5 11h-13zM8 9l2-5M16 9l-2-5"/>',bell:'<path d="M18 9a6 6 0 10-12 0c0 6-2 7-2 7h16s-2-1-2-7"/><path d="M10 20a2 2 0 004 0"/>',tup:'<path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/>',tdn:'<path d="M3 7l6 6 4-4 8 8"/><path d="M14 17h7v-7"/>',ai:'<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M18.5 14.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/>'};
 const ic=n=>`<svg class="i" viewBox="0 0 24 24">${P[n]}</svg>`;
 /* ===== مشاريع Firebase (مفاتيح الويب عامة — الحماية من Security Rules) ===== */
 const A={
@@ -181,11 +199,14 @@ function alerts(){const r=[],m=ms(),v=vs(),p=ps();Object.values(D.bud||{}).forEa
 Object.values(A).forEach(a=>{if(a.user&&a.err)r.push(['bad',`${a.n}: ${a.err}`])});return r}
 /* ===== كلمة الرئيسية (بدون تكرار حتى تنتهي كل الكلمات) ===== */
 function wPick(force){const c=arr(D.vocab.cards);if(!c.length)return null;const ids=c.map(x=>x.id);let seen=[];try{seen=JSON.parse(localStorage.getItem('dash.seen')||'[]')}catch(e){}seen=seen.filter(i=>ids.includes(i));const cur=+localStorage.getItem('dash.cur')||0;let w=c.find(x=>x.id===cur);const save=()=>localStorage.setItem('dash.seen',JSON.stringify(seen));
- if(!w||force){let pool=ids.filter(i=>!seen.includes(i));if(!pool.length){seen=[];pool=ids.filter(i=>i!==cur);if(!pool.length)pool=ids}const id=pool[Math.floor(Math.random()*pool.length)];w=c.find(x=>x.id===id);seen.push(id);localStorage.setItem('dash.cur',id);save()}else if(!seen.includes(w.id)){seen.push(w.id);save()}
+ if(!w||force){let pool=ids.filter(i=>!seen.includes(i));const duep=pool.filter(i=>{const z=c.find(v=>v.id===i);return z&&z.due&&z.due<=Date.now()});if(duep.length)pool=duep;if(!pool.length){seen=[];pool=ids.filter(i=>i!==cur);if(!pool.length)pool=ids}const id=pool[Math.floor(Math.random()*pool.length)];w=c.find(x=>x.id===id);seen.push(id);localStorage.setItem('dash.cur',id);save()}else if(!seen.includes(w.id)){seen.push(w.id);save()}
  return{w,n:ids.length,done:seen.length}}
 const wNext=()=>{wPick(true);sched()};
 const spk=t=>{try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.9;speechSynthesis.speak(u)}catch(e){}};
-const wc=()=>{const x=A.vocab.user&&A.vocab.ld&&!A.vocab.err&&wPick();if(!x)return'';const w=x.w;return `<div class="g card wc" onclick="wNext()"><div class="wt"><span>كلمة من كلماتي</span><span>${x.done}/${x.n}</span></div><div class="en">${esc(w.en)}</div><div class="ar">${esc(w.ar)}</div>${w.ex?`<div class="ex">${esc(w.ex)}</div>`:''}<div class="wt"><button class="ib" data-w="${esc(w.en)}" onclick="event.stopPropagation();spk(this.dataset.w)">${ic('spk')}</button><span>اضغط لكلمة جديدة</span></div></div>`};
+const wc=()=>{const x=A.vocab.user&&A.vocab.ld&&!A.vocab.err&&wPick();if(!x)return'';const w=x.w,due=w.due&&w.due<=Date.now();return `<div class="g card wc" onclick="wNext()"><div class="wt"><span>كلمة من كلماتي${due?' · <b style="color:var(--warn)">مستحقة</b>':''}</span><span>${x.done}/${x.n}</span></div><div class="en">${esc(w.en)}</div><div class="ar">${esc(w.ar)}</div>${w.ex?`<div class="ex">${esc(w.ex)}</div>`:''}<div class="wbtns"><button class="wok" onclick="event.stopPropagation();vGrade('${w.id}',1)">عرفتها ✓</button><button class="wno" onclick="event.stopPropagation();vGrade('${w.id}',0)">محتاج أراجعها</button></div><div class="wt"><button class="ib" data-w="${esc(w.en)}" onclick="event.stopPropagation();spk(this.dataset.w)">${ic('spk')}</button><span>اضغط الكارت لكلمة جديدة</span></div></div>`};
+const vGrade=async(id,ok)=>{const c=arr(D.vocab.cards).find(x=>x.id==id);if(!c)return;const n=Date.now();let nxt=1;try{await vTx(o=>{o.cards=o.cards.map(x=>{if(x.id!=id)return x;let ivl=+x.ivl||0,ease=+x.ease||2.5,reps=+x.reps||0,lapses=+x.lapses||0;
+ if(ok){ease=Math.min(3,ease+.05);reps++;ivl=ivl<1?1:Math.round(ivl*ease)}else{ease=Math.max(1.3,ease-.2);lapses++;ivl=1}
+ nxt=ivl;return{...x,ivl,ease,reps,lapses,last:n,due:n+ivl*864e5}});return o});wNext();toast(ok?`متقنة! المراجعة القادمة بعد ${nxt} يوم 💪`:'هتراجعها تاني بكرة 📌')}catch(e){er(e)}};
 /* ===== مكوّنات ===== */
 let Q=[],CH={},QAM=0,ALM=0;const syncPop=()=>{const q=$('#qam'),a=$('#alm');if(q)q.classList.toggle('on',QAM);if(a)a.classList.toggle('on',ALM)};
 const ch=(id,type,labels,sets)=>{Q.push([id,type,labels,sets]);return `<div class="cbox"><canvas id="${id}"></canvas></div>`};
@@ -258,6 +279,8 @@ function vS(){const th=localStorage.getItem('dash.theme')||'auto',u=(()=>{try{re
  <div class="g card"><h3>صورة الخلفية</h3><div class="row" style="flex-wrap:wrap;justify-content:flex-start;gap:10px"><label class="btn" style="margin:0;display:inline-flex;flex:none;font-size:14px;color:var(--ink);cursor:pointer">${ic('plus')} اختيار صورة<input type="file" accept="image/*" hidden onchange="setBgFile(this.files[0])"></label>${localStorage.getItem('dash.bg')?`<button class="bad" style="flex:none" onclick="rmBg()">إزالة الصورة</button>`:''}</div>${localStorage.getItem('dash.bg')?`<label>الضبابية: <span id="bv_b">${bgv('b')}px</span></label><input type="range" min="0" max="40" value="${bgv('b')}" oninput="setBgv('b',this.value)"><label>الوضوح: <span id="bv_o">${bgv('o')}%</span></label><input type="range" min="0" max="100" value="${bgv('o')}" oninput="setBgv('o',this.value)">`:`<p style="color:var(--sub);font-size:13px;margin-top:10px">اختار صورة من جهازك لتبقى خلفية اللوحة.</p>`}</div>
  <div class="g card"><h3>القفل التلقائي بعد الخمول</h3><div class="seg">${[[0,'معطّل'],[15,'١٥ د'],[30,'٣٠ د'],[60,'ساعة']].map(([n,l])=>`<button class="${lk===n?'on':''}" onclick="setLock(${n})">${l}</button>`).join('')}</div></div>
  <div class="g card"><h3>الاتصال والروابط</h3>${Object.keys(A).map(k=>{const a=A[k];return `<div class="it"><div class="m"><b>${a.n}</b><small>${a.user?esc(a.user.email):'غير متصل'}</small></div>${a.na?pill('بدون تسجيل دخول','n'):a.user?`<button onclick="A.${k}.auth.signOut()">خروج</button>`:`<button class="pri" onclick="relogin('${k}')">دخول</button>`}</div><label>رابط ${a.n} (الافتراضي: ${esc(appUrl(k))})</label><input dir="ltr" value="${esc(u[k]||'')}" placeholder="https://..." onchange="setUrl('${k}',this.value)">`}).join('')}</div>
+ <div class="g card"><h3>المساعد الذكي · Gemini</h3><label>مفتاح Google AI API</label><input dir="ltr" type="password" value="${esc(AI.k())}" onchange="setAik(this.value)" placeholder="AIza..." autocomplete="off"><label>اسم الموديل</label><input dir="ltr" value="${esc(AI.m())}" onchange="setAim(this.value)" placeholder="gemini-3.5-flash-lite"><p style="color:var(--sub);font-size:12.5px;margin-top:8px">المفتاح بيتخزن على جهازك فقط وبيتبعت لجوجل مباشرة. اعمل مفتاح مجاني من aistudio.google.com ولو الموديل اتغير اسمه عدّله هنا.</p></div>
+ <div class="g card"><div class="bar2"><h3>نسخة احتياطية شاملة</h3><div class="row" style="flex:none"><button onclick="bkExport()">${ic('dl')} تصدير</button><label class="btn" style="flex:none;margin:0;cursor:pointer">استيراد<input type="file" accept=".json,application/json" hidden onchange="bkImport(this.files[0])"></label></div></div><p style="color:var(--sub);font-size:12.5px">يصدّر بيانات كل التطبيقات المتصلة في ملف JSON واحد. الاستيراد يكتب فوق بيانات نفس التطبيقات الموجودة في الملف (بعد تأكيد).</p></div>
  <div class="g card"><div class="bar2"><h3>فحص الأمان</h3><button class="pri" onclick="secCheck()">افحص الآن</button></div><p style="color:var(--sub);font-size:13px;margin-bottom:8px">بيحاول قراءة كل مشروع بدون تسجيل دخول. لو ظهر "مفتوح للعامة" عدّل الـ Security Rules فورًا.</p>${Object.keys(A).map(k=>row(A[k].n,A[k].f.projectId+(A[k].na?' · بدون تسجيل دخول':''),SEC[k]?pill(SEC[k]==='ok'?'محمي':SEC[k]==='bad'?'⚠ مفتوح للعامة':'تعذّر الفحص',SEC[k]==='ok'?'ok':SEC[k]==='bad'?'bad':'n'):'')).join('')}</div>
  ${IP?`<div class="g card"><button class="pri" onclick="IP.prompt()">تثبيت كتطبيق على الجهاز</button></div>`:''}
  <div class="g card"><button class="bad" onclick="Object.values(A).forEach(a=>a.auth&&a.auth.signOut())">تسجيل الخروج من الكل</button></div>`}
@@ -382,9 +405,76 @@ const embSave=()=>{let v=$('#eu').value.trim();if(!v)return;if(!/^https?:/.test(
  p.addEventListener('pointerup',()=>{dr=0;if(mv){localStorage.setItem('dash.pilly',p.style.top);arm()}});
  p.addEventListener('click',e=>{if(mv){e.stopPropagation();e.preventDefault();mv=0;return}if(p.classList.contains('c')){p.classList.remove('c')}arm()},true);
  new MutationObserver(()=>{if($('#embed').hidden)p.classList.add('c')}).observe($('#embed'),{attributes:true,attributeFilter:['hidden']})})();
+/* ===== المساعد الذكي (Gemini) ===== */
+let AIB=0;
+const AI={k:()=>localStorage.getItem('dash.aik')||'',m:()=>localStorage.getItem('dash.aimd')||'gemini-3.5-flash-lite',his:(()=>{try{return JSON.parse(localStorage.getItem('dash.aihis')||'[]')}catch(e){return[]}})()};
+const setAik=v=>{v.trim()?localStorage.setItem('dash.aik',v.trim()):localStorage.removeItem('dash.aik');toast('تم حفظ المفتاح');sched()};
+const setAim=v=>{localStorage.setItem('dash.aimd',v.trim()||'gemini-3.5-flash-lite');toast('تم حفظ الموديل');sched()};
+const aiSave=()=>{try{localStorage.setItem('dash.aihis',JSON.stringify(AI.his.slice(-40)))}catch(e){}};
+const aiClear=()=>{AI.his=[];localStorage.removeItem('dash.aihis');sched();toast('تم مسح المحادثة')};
+const aiDigest=()=>{const parts=[],mk=(t,ok,b)=>ok?`## ${t}\n${b}`:'';
+ parts.push(`اليوم: ${dkey(new Date())}. اللوحة تجمع تطبيقات المستخدم: آيات (حفظ قرآن)، مالي (مصروفات ودخل)، كلماتي (إنجليزية)، نقطة البيع (مبيعات ومخزون)، الموشن (عملاء ومشاريع)، البيت (طلبات ووجبات وملاحظات).`);
+ const q=qs();parts.push(mk('آيات',A.quran.user&&A.quran.ld,`إجمالي ${q.t} · محفوظة ${q.m} · قيد الحفظ ${q.p}\n${D.quran.slice(0,80).map(x=>`${x.name} [${x.surah}${x.numbers?' '+x.numbers:''}] ${x.status==='memorized'?'محفوظة':'قيد الحفظ'}`).join(' | ')||'لا توجد آيات'}`));
+ if(A.money.user&&A.money.ld){const m=ms();parts.push(`## مالي\nالرصيد ${nf(m.bal)} · دخل الشهر ${nf(m.mi)} · صرف الشهر ${nf(m.me)} · صرف الشهر السابق ${nf(m.pe)}\nميزانيات: ${Object.values(D.bud||{}).map(b=>`${b.name} ${nf(m.cat[b.name]||0)}/${nf(b.amount)}`).join(' · ')||'لا توجد'}\nأعلى تصنيفات الشهر: ${Object.entries(m.cat).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([c,s])=>`${c}: ${nf(s)}`).join(' · ')||'—'}\nآخر 100 عملية:\n${D.money.slice(-100).map(t=>`${t.date} ${t.type==='income'?'+':'-'}${nf(t.amount)} ${t.category}${t.description?' · '+t.description:''}`).join('\n')||'لا توجد'}`)}
+ if(A.vocab.user&&A.vocab.ld){const v=vs();parts.push(`## كلماتي\nإجمالي ${v.t} · متقنة ${v.m} · مستحقة الآن ${v.due} · متأخرة ${v.late} · أيام متتالية ${v.st}\nالكلمات: ${v.c.slice(0,120).map(x=>`${x.en} = ${x.ar} (فترة ${x.ivl||0} يوم، مستحقة ${x.due&&x.due<=Date.now()?'نعم':'لا'})`).join(' | ')}`)}
+ if(A.pos.user&&A.pos.ld){const p=ps();parts.push(`## نقطة البيع\nمبيعات اليوم ${nf(p.tod)} · الشهر ${nf(p.cm)} · الإجمالي ${nf(p.tot)} · منتجات مخزونها منخفض ${p.low}\nالمنتجات: ${p.Pr.slice(0,200).map(x=>`${x.name}: سعر ${nf(x.price)} · مخزون ${x.stock}${x.category?' · '+x.category:''}`).join(' | ')}\nالأكثر مبيعًا: ${p.top.map(([n,q2])=>n+' ×'+q2).join(' · ')||'—'}\nطرق الدفع: ${Object.entries(p.pay).map(([k2,v2])=>k2+': '+nf(v2)).join(' · ')||'—'}`)}
+ if(A.motion.user&&A.motion.ld){const o=mos(),cn=id=>(o.C.find(c=>c.id==id)||{}).name||'';parts.push(`## الموشن\nعملاء ${o.C.length} · مشاريع نشطة ${o.act.length} · مكتملة ${o.dn.length} · متأخرة ${o.late.length}\nالعملاء: ${o.C.slice(0,60).map(c=>`${c.name}${c.cat?' ('+c.cat+')':''}${c.phone?' · '+c.phone:''}${c.email?' · '+c.email:''}`).join(' | ')}\nالمشاريع:\n${o.Pr.slice(0,80).map(p=>`${p.title} · عميل ${cn(p.client)||'—'}${p.type?' · '+p.type:''}${p.deadline?' · تسليم '+p.deadline:''} · ${nf(p.cost||0)} ج.م · ${p.status==='done'?'مكتمل':'نشط'} · مهام ${arr(p.tasks).filter(t=>t.done).length}/${arr(p.tasks).length}`).join('\n')||'لا توجد'}`)}
+ if(A.house.user&&A.house.ld){const h=hos();parts.push(`## البيت\nمطلوب شراؤه ${h.pend.length} · عاجل ${h.urg.length}\nالطلبات المعلقة: ${h.pend.map(i=>`${i.name}${i.urgent?' (عاجل)':''}`).join(' · ')||'لا يوجد'}\nالوجبات: ${h.M.slice(0,40).map(m=>`${m.title}${m.day?' · '+m.day:''} (موافق ${arr(m.upVotes).length}/تغيير ${arr(m.downVotes).length})`).join(' | ')}\nآخر الملاحظات: ${h.N.slice(-10).map(n=>n.text).join(' | ')}`)}
+ return parts.join('\n\n')};
+const aiSys=()=>`أنت "مساعد اللوحة" — مساعد تحليلي شخصي داخل لوحة تحكم موحدة. تلتزم بما يلي:
+1) اعتمد فقط على بيانات المستخدم المرفقة أدناه ولا تخترع أرقامًا؛ لو المعلومة غير موجودة قول ذلك بصراحة.
+2) أجب بالعربية بلهجة ودودة وباختصار ووضوح.
+3) لو طُلب تقرير أو تحليل، نظّم الإجابة بعناوين ونقاط وأرقام واضحة.
+4) التواريخ بصيغة YYYY-MM-DD والأرقام بالأرقام الإنجليزية.
+5) لو السؤال خارج بيانات المستخدم تمامًا أجب باختصار من معرفتك العامة مع التوضيح.
+
+===== بيانات المستخدم الحالية =====
+${aiDigest()}`;
+const aiCall=async()=>{const contents=[];AI.his.slice(-10).forEach(m=>{const role=m.r==='u'?'user':'model',last=contents[contents.length-1];if(last&&last.role===role)last.parts[0].text+='\n'+m.t;else contents.push({role,parts:[{text:m.t}]})});while(contents.length&&contents[0].role!=='user')contents.shift();
+ const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(AI.m())}:generateContent?key=${encodeURIComponent(AI.k())}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({systemInstruction:{parts:[{text:aiSys()}]},contents,generationConfig:{temperature:.4}})});
+ if(!r.ok){const j=await r.json().catch(()=>({}));throw new Error((j.error&&j.error.message)||'HTTP '+r.status)}
+ const j=await r.json(),t=((j.candidates||[])[0]&&((j.candidates[0].content||{}).parts||[]).map(p=>p.text||'').join(''))||'مفيش رد من الموديل';return t};
+const aiMsg=m=>m.r==='u'?`<div class="aim u"><span>${esc(m.t)}</span></div>`:`<div class="aim a"><span>${esc(m.t)}</span></div>`;
+const aiAsk=async q=>{q=String(q||'').trim();if(!q||AIB)return;if(!AI.k()){toast('ضيف مفتاح Google AI من الإعدادات أولًا');go('set');return}
+ AI.his.push({r:'u',t:q});AIB=1;sched();
+ setTimeout(()=>{const l=$('#ailist');if(l)l.scrollTop=l.scrollHeight},30);
+ try{const t=await aiCall();AI.his.push({r:'a',t})}catch(e){AI.his.push({r:'a',t:'⚠️ '+e.message})}
+ AIB=0;aiSave();sched();
+ setTimeout(()=>{const l=$('#ailist');if(l)l.scrollTop=l.scrollHeight},30)};
+const aiSubmit=e=>{e.preventDefault();const i=$('#aiq'),q=i.value;i.value='';aiAsk(q)};
+const AIC=['لخّص وضعي المالي هذا الشهر','إيه اللي مستحق مراجعته دلوقتي؟','اعملي تقرير أسبوعي شامل','أخطر تنبيهات عندي إيه؟','أكتر ٣ منتجات مبيعًا ومخزونهم كام؟','مشاريعي المتأخرة ومواعيد تسليمها'];
+const aiChip=c=>aiAsk(c);
+function vAI(){const has=AI.k();
+ return `<div class="hd"><div><h1>المساعد الذكي</h1><p>يحلل ويبحث في كل بيانات تطبيقاتك — اسأله أي حاجة</p></div><div class="hact">${AI.his.length?`<button class="btn" onclick="aiClear()">${ic('trash')} مسح المحادثة</button>`:''}</div></div>
+ <div class="g card aicard"><div class="ailist" id="ailist">${AI.his.length?AI.his.map(aiMsg).join(''):'<div class="empty" style="border:0">اسأل سؤال عن بياناتك، مثلًا: «صرفت كام على البقالة الشهر ده؟»</div>'}${AIB?'<div class="aim a typing"><span>يكتب…</span></div>':''}</div>
+ <div class="chips">${AIC.map(c=>`<button onclick="aiChip('${c}')">${c}</button>`).join('')}</div>
+ <form class="airow" onsubmit="aiSubmit(event)"><input id="aiq" placeholder="${has?'اكتب سؤالك…':'ضيف المفتاح من الإعدادات أولًا'}" autocomplete="off" ${AIB?'disabled':''}><button class="pri" type="submit" ${AIB?'disabled':''}>إرسال</button></form>
+ ${has?'':'<p class="aiwarn">محتاج مفتاح API مجاني من Google AI Studio (aistudio.google.com) — حطه في الإعدادات ← المساعد الذكي.</p>'}</div>`}
+/* ===== نسخة احتياطية شاملة ===== */
+const bkExport=()=>{const apps={},names=[],add=(k,ok,v)=>{if(ok){apps[k]=v;names.push(A[k].n)}};
+ add('quran',A.quran.user&&A.quran.ld,D.quran);
+ add('money',A.money.user&&A.money.ld,{transactions:D.money,budgets:D.bud});
+ add('vocab',A.vocab.user&&A.vocab.ld,D.vocab);
+ add('pos',A.pos.user&&A.pos.ld,D.pos);
+ add('motion',A.motion.user&&A.motion.ld,D.motion);
+ add('house',A.house.user&&A.house.ld,D.house);
+ if(!names.length)return toast('مفيش بيانات محمّلة للتصدّير');
+ const b=new Blob([JSON.stringify({app:'dashboard',v:1,date:new Date().toISOString(),apps},null,1)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='dashboard-backup-'+dkey(new Date())+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1e3);toast('تم التصدير: '+names.join('، ')+' ✓')};
+const bkImport=async f=>{if(!f)return;let j;try{j=JSON.parse(await f.text())}catch(e){return er(new Error('الملف مش JSON صالح'))}
+ const ap=j&&j.apps;if(!ap)return er(new Error('الملف ده مش نسخة من اللوحة'));
+ const jobs=[],names=[],ok=k=>A[k].user&&A[k].ld;
+ if(ok('quran')&&ap.quran){names.push('آيات');jobs.push(()=>A.quran.db.ref(`users/${A.quran.user.uid}/verses`).set(arr(ap.quran)))}
+ if(ok('money')&&ap.money){names.push('مالي');jobs.push(()=>A.money.db.ref(`users/${A.money.user.uid}/transactions`).set(Object.fromEntries(arr(ap.money.transactions).map(t=>[t.id,t]))));if(ap.money.budgets)jobs.push(()=>A.money.db.ref(`users/${A.money.user.uid}/budgets`).set(ap.money.budgets))}
+ if(ok('vocab')&&ap.vocab){names.push('كلماتي');jobs.push(()=>A.vocab.db.ref(`users/${A.vocab.user.uid}/v2`).set(ap.vocab))}
+ if(ok('pos')&&ap.pos){names.push('نقطة البيع');jobs.push(()=>pDoc().set({products:arr(ap.pos.products),sales:arr(ap.pos.sales)},{merge:true}))}
+ if(ok('motion')&&(ap.motion.clients||ap.motion.projects)){names.push('الموشن');jobs.push(()=>{const b=A.motion.db.batch();arr(ap.motion.clients).forEach(c=>b.set(mdc('clients').doc(c.id),c));arr(ap.motion.projects).forEach(p=>b.set(mdc('projects').doc(p.id),p));return b.commit()})}
+ if(ok('house')&&ap.house){['grocery','meals','notes'].forEach(p=>{if(ap.house[p]){names.push('البيت · '+p);jobs.push(()=>A.house.db.ref(p).set(Object.fromEntries(arr(ap.house[p]).map(x=>[x.id,x]))))}})}
+ if(!jobs.length)return toast('مفيش تطبيقات مطابقة للاستيراد — اتأكد إنك متصل بنفس الحسابات');
+ if(!confirm('سيتم الكتابة فوق بيانات: '+names.join('، ')+'\nمتأكد؟'))return;
+ try{await Promise.all(jobs.map(f=>f()));toast('تم الاستيراد ✓')}catch(e){er(e)}};
 /* ===== النظام ===== */
-let T='home',rq;const NAV=[['home','الرئيسية','home'],...Object.keys(A).map(k=>[k,A[k].n,A[k].i]),['set','الإعدادات','set']];
-const V={home:vHome,set:vS,search:vSr,...Object.fromEntries(Object.keys(A).map(k=>[k,A[k].v]))};
+let T='home',rq;const NAV=[['home','الرئيسية','home'],...Object.keys(A).map(k=>[k,A[k].n,A[k].i]),['ai','المساعد الذكي','ai'],['set','الإعدادات','set']];
+const V={home:vHome,set:vS,search:vSr,ai:vAI,...Object.fromEntries(Object.keys(A).map(k=>[k,A[k].v]))};
 const go=k=>{GQ='';$('#gs').value='';QAM=0;ALM=0;location.hash=k},sched=()=>{cancelAnimationFrame(rq);rq=requestAnimationFrame(render)};
 function render(){syncNA();const any=Object.values(A).some(a=>a.user&&!a.na);$('#login').hidden=any;$('#app').hidden=!any;lockReset();if(!any){document.body.classList.remove('emb');return}T=location.hash.slice(1);const emb=T.startsWith('app-')&&A[T.slice(4)]?T.slice(4):null;if(!emb&&!V[T])T='home';const ae=document.activeElement;if(T==='set'&&ae&&ae.tagName==='INPUT')return;
  if(emb)showEmbed(emb);else{$('#embed').hidden=true;$('#main').hidden=false;document.body.classList.remove('emb');Q=[];$('#main').innerHTML=V[T]()}$('#ttl').textContent=emb?A[emb].n:T==='search'?'البحث':(NAV.find(n=>n[0]===T)||[])[1];
